@@ -1,0 +1,28 @@
+{
+  "name": "pickit",
+  "version": "1.0.0",
+  "description": "Challenge registro de servicios de un taller mecanico",
+  "main": "srh/app.ts",
+  "scripts": {
+    "start:dev": "nodemon src/app.ts --exec ts-node",
+    "tsc:init": "tsc --init",
+    "tsc": "tsc"
+  },
+  "author": "Leguizamon Tomassi Nicolas Federico",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/helmet": "^4.0.0",
+    "@types/morgan": "^1.9.3",
+    "nodemon": "^2.0.15",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "fs": "0.0.1-security",
+    "helmet": "^5.0.2",
+    "morgan": "^1.10.0"
+  }
+}
