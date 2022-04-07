@@ -1,4 +1,4 @@
-import {Router, Request, Response, json} from 'express';
+import {Router, Request, Response} from 'express';
 
 const routes = Router();
 
