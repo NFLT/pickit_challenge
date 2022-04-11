@@ -9,4 +9,6 @@ routes.get('/owners/', ownerController.getOwners);
 routes.get('/owners/:idOwner', ownerController.getOwner);
 routes.delete('/owners/:idOwner', ownerController.deleteOwner);
 
+routes.get('/owners/:idOwner/cars', ownerController.getCars);
+
 export default routes;
