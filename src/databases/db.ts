@@ -28,9 +28,9 @@ const close = async () => {
 
 export const execute = async (sql:string, args:any[] | null = null) => {
     try {
-        if (!isTransaction) await open();
+        /*if (!isTransaction)*/ await open();
         let [rows, fields] = await connection.query(sql, args);
-        if (!isTransaction) await close();
+        /*if (!isTransaction)*/ await close();
         
         return rows;
     } catch (error: any) {
