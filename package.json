@@ -4,6 +4,7 @@
   "description": "Challenge registro de servicios de un taller mecanico",
   "main": "srh/app.ts",
   "scripts": {
+    "start": "node dist/app",
     "start:dev": "nodemon src/app.ts --exec ts-node",
     "tsc:init": "tsc --init",
     "tsc": "tsc"
@@ -11,19 +12,26 @@
   "author": "Leguizamon Tomassi Nicolas Federico",
   "license": "ISC",
   "devDependencies": {
+    "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.12",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/helmet": "^4.0.0",
     "@types/morgan": "^1.9.3",
+    "@types/node": "^17.0.23",
     "nodemon": "^2.0.15",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-validator": "^6.14.0",
     "fs": "0.0.1-security",
     "helmet": "^5.0.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3"
   }
 }
