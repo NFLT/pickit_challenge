@@ -19,7 +19,7 @@ export const createService = async (description: string, price: number) => {
     `;
 
     let result = await database.execute(sql, [description,  price]);
-    return result;
+    return result.insertId;
 }
 
 
