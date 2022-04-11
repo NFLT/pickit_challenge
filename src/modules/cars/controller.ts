@@ -34,7 +34,7 @@ export const updateCar = async (req: Request, res: Response, next: NextFunction)
         }
 
         await carModel.updateCarById(parseInt(idCar), brand, model, year, colour, carPlate, idOwner);
-        res.json({  });
+        res.status(204).json({  });
     } catch (error) {
         next(error);
     }
@@ -72,8 +72,8 @@ export const deleteCar = async (req: Request, res: Response, next: NextFunction)
             throw new ConstraintError(ErrorCodes.CONSTRAINT_HAS_LINKED_DATA, msg);
         }
 
-        const cars = await carModel.deleteCarById(idCar);
-        res.json({ cars });   
+        await carModel.deleteCarById(idCar);
+        res.status(204).json();   
     } catch (error) {
         next(error);
     }
