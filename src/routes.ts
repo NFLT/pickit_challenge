@@ -14,7 +14,7 @@
   * @param path nombre de la carpeta en donde iniciar la búsqueda
   * @returns un array de strings con las rutas de cada archivo routes.ts detectado
   */
- const getRouterPaths = (path: string):string[] => {
+export const getRouterPaths = (path: string):string[] => {
      // Si es un directorio, analiza el contenido del directorio
      if (fs.lstatSync(path).isDirectory()) {
          let dirPaths : string[] = [];

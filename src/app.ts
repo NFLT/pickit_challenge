@@ -5,11 +5,16 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import swaggerUI from 'swagger-ui-express';
+import swaggerJsDoc from 'swagger-jsdoc';
 
 import { getAllRouters } from './routes';
 import errorHandler from './middlewares/errorHandler';
+import swaggerConfig from './config/swagger';
 
 dotenv.config();
+
+console.log(swaggerConfig);
 
 const app = express();
 
@@ -17,9 +22,14 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
+//Configurando para recibir peticiones en formato JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// Cargando documentación en línea
+app.use('/docs/', swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(swaggerConfig)));
+
+//Cargando routes con url de los módulos
 const routers = getAllRouters();
 for (let i = 0; i < routers.length; i++) {
     let router = routers[i]
