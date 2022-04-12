@@ -23,6 +23,7 @@ const open = async () => {
 const close = async () => {
     if (connection != null) {
         await connection.end();
+        connection = null;
     }
 }
 
