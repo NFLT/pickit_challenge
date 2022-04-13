@@ -2,18 +2,21 @@ import { NextFunction, Request, Response } from 'express';
 import * as orderModel from './model'; 
 import orderMapper from './mappers';
 import { ConstraintError, NotFoundError, ErrorCodes } from '../../errors/database.errors';
+import { Console } from 'console';
 
 export const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { idCar } = req.body;
         
+
+/*
         // Si el vehiculo se encuentra en una orden con estado abierto, no se permite su registro
         const openOrders = await orderModel.getOpenOrdersByCar(idCar);
         console.log(openOrders.length);    
         if (openOrders.length != 0) {
             const msg = "Ya existe una orden abierta para este automóvil.";
             throw new ConstraintError(ErrorCodes.CONSTRAINT_CAR_ALREADY_IN_ORDER, msg);
-        } 
+        } */
 
         const idOrder = await orderModel.createOrder(parseInt(idCar));
         res.status(201).json({ idOrder });
@@ -57,11 +60,11 @@ export const addService = async (req: Request, res: Response, next: NextFunction
         const idOrder = parseInt(req.params.idOrder);
         const idService = parseInt(req.params.idService);
 
-        const order = orderModel.getOrders(idOrder);
-        if (!order) {
+        const order = await orderModel.getOrders(idOrder);
+        /*if (!order) {
             const msg = "Orden inexistente!";
             throw new NotFoundError(ErrorCodes.CONSTRAINT_INCOMPATIBLE_COLOR_SERVICE, msg);
-        }
+        }*/
         
         //Se restringe la posibilidad de aplicar el servicio de pintura a autos grises
         const orderDto = orderMapper.toOrderDto(order);
@@ -72,12 +75,15 @@ export const addService = async (req: Request, res: Response, next: NextFunction
 
         //Verificando si la orden dada ya tiene registrdo el servicio especificado
         const hasService = await orderModel.hasService(idOrder, idService);
+        console.log("Has service");
+        console.log(hasService);
+        console.log(idOrder, idService);
         if (hasService) {
             const msg = "El servicio que se está intentando cargar, ya se encuentra registrado en la orden";
             throw new ConstraintError(ErrorCodes.CONSTRAINT_DUPLICATED_ORDER_SERVICE, msg);
         }
 
-        await orderModel.addService(idOrder, idService); 
+        await orderModel.addService(idOrder, idService);
         res.status(204).json();
     } catch (error) {
         next(error);
@@ -101,15 +107,22 @@ export const removeService = async (req: Request, res: Response, next: NextFunct
 export const confirmOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const idOrder  = parseInt(req.params.idOrder);
-        const order = await orderModel.getOrders(idOrder);
+        await orderModel.changeState(idOrder, Status.CONFIRMED);
 
-        if (order.rela_estado == Status.OPEN) {
-            orderModel.changeState(idOrder, Status.CONFIRMED); 
-            res.status(204).json();
-        } else {
+        const order = await orderModel.getOrders(idOrder);
+        const orderDetails = await orderModel.getOrderDetails(idOrder);
+
+        const orderDto = orderMapper.toOrderDto(order, orderDetails);
+        console.log(order);
+        console.log(orderDto);
+
+        /*if (order.rela_estado == Status.OPEN) {*/
+            
+            res.status(200).json({ order: orderDto });
+        /*} else {
             const msg = "Sólo se pueden confirmar ordenes abiertas";
             throw new ConstraintError(ErrorCodes.CONSTRAINT_STATE_CHANGE, msg);
-        }
+        }*/
     } catch (error) {
         next(error);
     }
@@ -140,13 +153,13 @@ export const cancelOrder = async (req: Request, res: Response, next: NextFunctio
         const idOrder  = parseInt(req.params.idOrder);
         const order = await orderModel.getOrders(idOrder);
 
-        if ([ Status.CONFIRMED, Status.OPEN ].includes(order.rela_estado)) {
+        /*if ([ Status.CONFIRMED, Status.OPEN ].includes(order.rela_estado)) {*/
             await orderModel.changeState(idOrder, Status.CANCELLED); 
             res.status(204).json();
-        } else {
+/*        } else {
             const msg = "Solo se pueden Cerrar ordenes Abiertas o confirmadas";
             throw new ConstraintError(ErrorCodes.CONSTRAINT_STATE_CHANGE, msg);
-        }
+        }*/
     } catch(error) {
         next(error);
     }

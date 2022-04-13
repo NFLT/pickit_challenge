@@ -1,3 +1,4 @@
+import { Console } from 'console';
 import * as database from '../../databases/db';
 
 /**
@@ -20,7 +21,8 @@ export const getOpenOrdersByCar = async (idCar: number) => {
 export const getOrders = async (idOrder?: number) => {
     let sql = `
         select 
-            id_orden, 
+            id_orden,
+            rela_estado,
             fecha orden_fecha, 
             total orden_total,
             marca auto_marca,
@@ -68,10 +70,32 @@ export const createOrder = async (idCar: number) => {
  * Agrega un servicio a una orden especificada
  * @param idOrder id de la orden
  * @param idService id del servicio
+** @param price precio actual del servicio
  */
 export const addService = async (idOrder: number, idService: number) => {
-    const sql = `insert into detalle_ordenes (rela_orden, rela_servicio) values (?, ?)`;
-    const result = await database.execute(sql, [ idOrder, idService ]);
+    try {
+        const sql = `insert into detalle_ordenes (rela_orden, rela_servicio, importe) values (?, ?, ?)`;
+   
+        database.beginTransaction();
+
+        let servicePrice = await getServicePrice(idService); 
+        let orderTotal = await getOrderTotal(idOrder);
+        let updatedOrderTotal = orderTotal + servicePrice;
+        //---------------------------------------------------------------
+        // DEBUG
+        console.log("ID_ORDEN:",idOrder);
+        console.log("Service price:", servicePrice);
+        console.log("Order Total:", orderTotal);
+        console.log("NEW TOTAL:",updatedOrderTotal);
+        //---------------------------------------------------------------
+
+        await database.execute(sql, [ idOrder, idService, servicePrice ]);
+        await updateOrderTotal(idOrder, updatedOrderTotal);
+        database.commit()    
+    } catch (error) {
+        database.rollback();
+        throw error;
+    }
 }
 
 
@@ -81,8 +105,22 @@ export const addService = async (idOrder: number, idService: number) => {
  * @param idService id del servicio
  */
 export const removeService = async (idOrder: number, idService: number) => {
-    const sql = `delete from detalle_ordenes where rela_orden = ? and rela_servicio = ?`;
-    const result = await database.execute(sql, [idOrder, idService]);
+    try {
+        const sql = `delete from detalle_ordenes where rela_orden = ? and rela_servicio = ?`;
+   
+        database.beginTransaction();
+        let servicePrice = await getServicePrice(idService); 
+        let orderTotal = await getOrderTotal(idOrder);
+
+        let updatedOrderTotal = orderTotal - servicePrice;
+        
+        await database.execute(sql, [ idOrder, idService ]);
+        await updateOrderTotal(idOrder, updatedOrderTotal);
+        database.commit()    
+    } catch (error) {
+        database.rollback();
+        throw error;
+    }
 }
 
 
@@ -106,13 +144,20 @@ export const getOrderDetails = async (idOrder: number) => {
 }
 
 
+/**
+ * Verifica si una orden posee un servicio dado
+ * @param idOrder 
+ * @param idService 
+ * @returns 
+ */
 export const hasService = async (idOrder: number, idService: number) => {
     const sql = `
         select count(*) cant from detalle_ordenes 
         where rela_orden = ? and rela_servicio = ?
     `;
     const result = await database.execute(sql, [idOrder, idService]);
-    return result.cant > 0
+    console.log(result);
+    return result.pop().cant > 0
 }
 
 /**
@@ -123,4 +168,39 @@ export const hasService = async (idOrder: number, idService: number) => {
 export const changeState = async (idOrder: number, idStatus: number) => {
     const sql = `update ordenes set rela_estado = ? where id_orden = ?`;
     const result = await database.execute(sql, [ idStatus, idOrder ]);
+}
+
+
+/**
+ * Recupera el precio de un servicio dado
+ * @param idService id del servicio
+ * @returns float  valor del servicio
+ */
+export const getServicePrice = async (idService: number) => {
+    const sql = `SELECT importe FROM servicios WHERE id_servicio = ?`;
+    const result = (await database.execute(sql, [ idService ])).pop();
+    return parseFloat(result.importe);
+} 
+
+/**
+ * Permite actualizar el importe total de la orden cada vez que se agregan o quitan registros
+ * @param idOrder id de la orden
+ * @param total nuevo importe total
+ */
+export const updateOrderTotal = async (idOrder: number, total: number) => {
+    const sql = `update ordenes set total = ? where id_orden = ?`;
+    await database.execute(sql, [ total, idOrder ])
+}
+
+/**
+ * Recupera el importe total actual de una orden dada
+ * @param idOrder 
+ * @returns float importe de la orden
+ */
+export const getOrderTotal = async (idOrder: number) => {
+    const sql = `SELECT total FROM ordenes WHERE id_orden = ?`;
+    const result = (await database.execute(sql, [ idOrder ])).pop();
+    console.log("Resultado order total");
+    console.log(result);
+    return parseFloat(result.total);
 }

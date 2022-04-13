@@ -61,7 +61,7 @@ export const createCar = async (brand: string, model: string, year: number, colo
     
     const args = [brand, model, year, colour, carPlate, idOwner] 
     let result = await database.execute(sql, args);
-    return result;
+    return result.insertId;
 }
 
 

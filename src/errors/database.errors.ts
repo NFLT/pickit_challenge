@@ -22,6 +22,15 @@ export class DatabaseError extends PickitChallengeError {
 }
 
 /**
+ * Errores de validacion
+ */
+ export class ValidationError extends PickitChallengeError {
+    constructor(errCode: number, description: string) {
+        super(errCode, description);
+    }
+}
+
+/**
  * Errores producidos por alguna restricción de las reglas de negocio
  */
 export class ConstraintError extends PickitChallengeError {
@@ -50,5 +59,6 @@ export enum ErrorCodes {
     CONSTRAINT_DUPLICATED_CAR_PLATE = 4003,
     CONSTRAINT_CAR_ALREADY_IN_ORDER = 4004,
     CONSTRAINT_STATE_CHANGE = 4005,
-    CONSTRAINT_HAS_LINKED_DATA = 4006
+    CONSTRAINT_HAS_LINKED_DATA = 4006,
+    CONSTRINT_NOT_OPEN_ORDER = 4007
 }

@@ -14,8 +14,6 @@ import swaggerConfig from './config/swagger';
 
 dotenv.config();
 
-console.log(swaggerConfig);
-
 const app = express();
 
 app.use(cors());

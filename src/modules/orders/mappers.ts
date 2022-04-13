@@ -5,8 +5,8 @@ class OrderMapper {
         const orderDto: OrderDto = {
             number: orderEntity.id_orden,
             status: orderEntity.estado_descripcion,
-            date: orderEntity.fecha,
-            total: orderEntity.total,
+            date: orderEntity.orden_fecha,
+            total: orderEntity.orden_total,
             ownerFullName: `${ orderEntity.propietario_apellido }, ${orderEntity.propietario_nombre}`,
             carBrand: orderEntity.auto_marca,
             carModel: orderEntity.auto_modelo,

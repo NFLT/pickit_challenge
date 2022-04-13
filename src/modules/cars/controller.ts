@@ -7,13 +7,6 @@ import { ConstraintError, ErrorCodes } from '../../errors/database.errors';
 export const createCar = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { brand, model, year, colour, carPlate, idOwner } = req.body;
-
-        //Se verifica que si ya está registrado un auto con la patente especificada.
-        if (carModel.getCarByPlate(carPlate) != null) {
-            const msg = "El vehículo que esta intentando igresar ya se encuentra registrado.";
-            throw new ConstraintError(ErrorCodes.CONSTRAINT_DUPLICATED_CAR_PLATE, msg);
-        }
-
         const idCar = await carModel.createCar(brand, model, year, colour, carPlate, idOwner);
         res.status(201).json({ idCar });
     } catch (error) {
@@ -26,10 +19,10 @@ export const updateCar = async (req: Request, res: Response, next: NextFunction)
         const { idCar } = req.params;
         const { brand, model, year, colour, carPlate, idOwner } = req.body;
 
-        //Se verifica que si ya está registrado un auto con la patente especificada.
-        const car = await carModel.getCarByPlate(carPlate);
+        const car = await carModel.getCarByPlate(carPlate.toUpperCase()); 
+
         if (car != null && car.id_auto != idCar) {
-            const msg = "Ya existe otro vehículo con la patente especificada.";
+            let msg = "El vehículo que esta intentando ingresar ya se encuentra registrado.";
             throw new ConstraintError(ErrorCodes.CONSTRAINT_DUPLICATED_CAR_PLATE, msg);
         }
 
@@ -54,6 +47,7 @@ export const getCar = async (req: Request, res: Response, next: NextFunction) =>
     try {
         const { idCar } = req.params;
         const car = await carModel.getCars(parseInt(idCar));
+        
         const carDto = carMapper.toCarDto(car);
         res.json({ car: carDto });
     } catch (error) {

@@ -20,5 +20,4 @@ const swaggerConfig = {
     apis: getRouterPaths(path.join(__dirname, '../modules/'))
 }
 
-console.log(process.env.API_SERVER_BASE_URL);
 export default swaggerConfig;
