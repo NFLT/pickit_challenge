@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-04-2022 a las 12:54:53
+-- Tiempo de generación: 13-04-2022 a las 13:03:35
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 7.3.28
 
@@ -31,7 +31,7 @@ CREATE TABLE `autos` (
   `id_auto` int(11) NOT NULL,
   `marca` varchar(50) NOT NULL,
   `modelo` varchar(50) NOT NULL,
-  `anio` date NOT NULL,
+  `anio` int(11) NOT NULL,
   `patente` varchar(10) NOT NULL,
   `color` varchar(30) NOT NULL,
   `rela_propietario` int(11) NOT NULL
@@ -42,11 +42,27 @@ CREATE TABLE `autos` (
 --
 
 INSERT INTO `autos` (`id_auto`, `marca`, `modelo`, `anio`, `patente`, `color`, `rela_propietario`) VALUES
-(2, 'Mercedes Benz', 'Model1', '0000-00-00', 'AA111AA', 'Gris', 5),
-(3, 'Toyota', 'Corolla', '0000-00-00', 'AA111AB', 'Azul', 5),
-(4, 'Toyota', 'Hilux', '0000-00-00', 'AA111AB', 'Rojo', 5),
-(5, 'Toyota', 'Hilux', '0000-00-00', 'AA111AD', 'Gris', 4),
-(6, 'Honda', 'CRV', '0000-00-00', 'AA111AE', 'Gris', 6);
+(2, 'Mercedes Benz', 'Model1', 0, 'AA111AA', 'Gris', 5),
+(3, 'Toyota', 'Corolla', 0, 'AA111AB', 'Azul', 5),
+(4, 'Toyota', 'Hilux', 0, 'AA111AB', 'Rojo', 5),
+(6, 'Honda', 'CRV', 0, 'AA111AE', 'Gris', 6),
+(7, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(8, 'Honda', 'CRV', 0, 'BB111AE1', 'Gris', 5),
+(9, 'Honda', 'CRV', 0, 'BB111AE1', 'Gris', 5),
+(10, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(11, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(12, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(13, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(14, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(15, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(16, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(17, 'Honda', 'CRV', 0, 'BB111AE', 'Gris', 5),
+(18, 'Honda', 'CRV', 0, 'XXX111', 'Gris', 5),
+(19, 'Honda', 'CRV', 0, 'XXX1111', 'Gris', 5),
+(22, 'Honda', 'CRV', 0, 'BB111AA', 'Gris', 5),
+(24, 'Honda', 'CRV', 0, 'BB111AB', 'Gris', 5),
+(25, 'Honda', 'CRV', 0, 'AB111AE', 'Gris', 6),
+(26, 'Prueba Edicion', 'Corolla', 0, 'AA999AA', 'Verde', 4);
 
 -- --------------------------------------------------------
 
@@ -60,6 +76,15 @@ CREATE TABLE `detalle_ordenes` (
   `rela_servicio` int(11) NOT NULL,
   `importe` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `detalle_ordenes`
+--
+
+INSERT INTO `detalle_ordenes` (`id_detalle`, `rela_orden`, `rela_servicio`, `importe`) VALUES
+(20, 13, 2, 100),
+(21, 13, 3, 150),
+(23, 13, 5, 200);
 
 -- --------------------------------------------------------
 
@@ -80,7 +105,7 @@ INSERT INTO `estados_ordenes` (`id_estado`, `descripcion`) VALUES
 (1, 'Abierta'),
 (2, 'Confirmada'),
 (3, 'Cerrada'),
-(5, 'Cancelado');
+(4, 'Cancelado');
 
 -- --------------------------------------------------------
 
@@ -101,8 +126,10 @@ CREATE TABLE `ordenes` (
 --
 
 INSERT INTO `ordenes` (`id_orden`, `rela_auto`, `rela_estado`, `fecha`, `total`) VALUES
-(5, 2, 1, '2022-04-10', 0),
-(6, 3, 1, '2022-04-10', 0);
+(13, 2, 3, '2022-04-12', 450),
+(14, 19, 4, '2022-04-13', 0),
+(16, 26, 1, '2022-04-13', 0),
+(17, 13, 1, '2022-04-13', 0);
 
 -- --------------------------------------------------------
 
@@ -122,8 +149,12 @@ CREATE TABLE `propietario` (
 
 INSERT INTO `propietario` (`id_propietario`, `nombre`, `apellido`) VALUES
 (4, 'Mirtha', 'Tomassi'),
-(5, 'Nicolás Federico', 'Leguizamón Tomassi'),
-(6, 'Nicolás F.', 'Leguizamón T.');
+(5, 'Juan', 'Perez'),
+(6, 'Nicolás Federico', 'Leguizamón'),
+(7, 'Felix', 'Leguizamón'),
+(8, 'Felix1', 'Leguizamón'),
+(11, 'Juan', 'Perez'),
+(12, 'Juan', 'Perez');
 
 -- --------------------------------------------------------
 
@@ -147,7 +178,9 @@ INSERT INTO `servicios` (`id_servicio`, `descripcion`, `importe`) VALUES
 (4, 'Cambio de correa', 200),
 (5, 'Revisión general', 200),
 (6, 'Pintura', 100),
-(7, 'Otro', 0);
+(7, 'Otro', 0),
+(8, 'Cambio', 100),
+(9, 'Prueba2', 100);
 
 --
 -- Índices para tablas volcadas
@@ -202,13 +235,13 @@ ALTER TABLE `servicios`
 -- AUTO_INCREMENT de la tabla `autos`
 --
 ALTER TABLE `autos`
-  MODIFY `id_auto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_auto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_ordenes`
 --
 ALTER TABLE `detalle_ordenes`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `estados_ordenes`
@@ -220,19 +253,19 @@ ALTER TABLE `estados_ordenes`
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
-  MODIFY `id_orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`
 --
 ALTER TABLE `propietario`
-  MODIFY `id_propietario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_propietario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas
