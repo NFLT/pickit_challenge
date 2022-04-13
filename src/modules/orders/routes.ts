@@ -95,7 +95,7 @@ routes.post('/orders/', orderValidator.validateCreateOrder,orderController.creat
  *          tags: [Orders]
  *          responses:
  *              200:
- *                  description: Se obtiene un listado con todos los propietarios almacenados en base de datos
+ *                  description: Se obtiene un listado con todas almacenadas en base de datos
  *                  content:
  *                      application/json:
  *                          schema:
@@ -154,7 +154,137 @@ routes.post('/orders/', orderValidator.validateCreateOrder,orderController.creat
  *                                  message: Ha ocurrido un error en intentar ejecutar la operación
  */
 routes.get('/orders/', orderController.getOrders);
-routes.get('/orders/:idOrder', orderController.getOrder);
+
+
+/**
+ * @swagger
+ * /orders/{idOrder}:
+ *      get:
+ *          summary: Recupera un propietario especifico de la base de datos
+ *          tags: [Orders]
+ *          parameters:
+ *              - in: path
+ *                name: idOrder
+ *                schema:
+ *                  type: integer
+ *                required: true
+ *          responses:
+ *              200:
+ *                  description: Se recuperan los datos de la orden
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  order:
+ *                                      type: object 
+ *                                      properties:
+ *                                          number:
+ *                                              type: integer
+ *                                              description: Nro de Orden
+ *                                          status: 
+ *                                              type: string
+ *                                              description: Estado de orden
+ *                                          date: 
+ *                                              type: string
+ *                                              description: Fecha de carga de la orden
+ *                                          total:
+ *                                              type: number
+ *                                              description: Importe a cobrar de la orden
+ *                                          ownerFullName:
+ *                                              type: string
+ *                                              description: Nombre completo del propietario
+ *                                          carBrand:
+ *                                              type: string
+ *                                              description: Marca del vehículo
+ *                                          carModel:
+ *                                              type: string
+ *                                              description: Modelo del vehículo
+ *                                          carColor:
+ *                                              type: string
+ *                                              description: Color de vehículo
+ *                                          carYear:
+ *                                              type: string
+ *                                              description: Año del modelo
+ *                                          carPlate:
+ *                                              type: string
+ *                                              description: Número de patente
+ *                                          details:
+ *                                              type: array
+ *                                              description: Servicios a aplicar
+ *                                              items:
+ *                                                  type: object
+ *                                                  properties:
+ *                                                      code:
+ *                                                          type: integer
+ *                                                          description: Código de servicio
+ *                                                      service:
+ *                                                          type: string
+ *                                                          description: Descripción del servicio
+ *                                                      total:
+ *                                                          type: number
+ *                                                          description: Importe a cobrar por el servicio
+ * 
+ * 
+ *              400:
+ *                  description: Ha ocurrido un error de validación de los datos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errors:
+ *                                      type: array
+ *                                      items:
+ *                                          type: object
+ *                                          properties:
+ *                                              value:
+ *                                                  type: string
+ *                                                  description: Valor del campo que generó el error
+ *                                              msg:
+ *                                                  type: string
+ *                                                  description: Mensaje de error
+ *                                              param:
+ *                                                  type: string
+ *                                                  description: Parámetro que género el error
+ *                                              location:
+ *                                                  type: string
+ *                                                  description: Ubicación del error
+ * 
+ *              404:
+ *                  description: No se ha encontrado el recurso
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: No se encontró el recurso solicitado
+ *              500:
+ *                  description: Ha ocurrido un error interno en el servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: Ha ocurrido un error en intentar ejecutar la operación
+ */
+routes.get('/orders/:idOrder', orderValidator.validateIdOrder, orderController.getOrder);
 
 // Agregan y quitan servicios de la orden
 routes.post('/orders/:idOrder/services/:idService', orderValidator.validateAddService, orderController.addService);

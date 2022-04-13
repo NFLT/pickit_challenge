@@ -244,3 +244,17 @@ export const validateCancelOrder = [
         validateResult(req, res, next)
     }
 ];
+
+
+export const validateIdOrder = [
+    check('idOrder')
+        .exists()
+        .not()
+        .isEmpty()
+        .isNumeric()
+        .custom(existsOrder),
+
+    (req:Request, res: Response, next: NextFunction) => {
+        validateResult(req, res, next)
+    }
+];
