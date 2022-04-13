@@ -286,8 +286,167 @@ routes.get('/orders/', orderController.getOrders);
  */
 routes.get('/orders/:idOrder', orderValidator.validateIdOrder, orderController.getOrder);
 
-// Agregan y quitan servicios de la orden
+
+
+/**
+ * @swagger
+ * /orders/{idOrder}/services/{idService}:
+ *      post:
+ *          summary: Agrega un servicio a una orden
+ *          tags: [Orders]
+ *          parameters:
+ *              - in: path
+ *                name: idOrder
+ *                type: integer
+ *                required: true
+ *              
+ *              - in: path
+ *                name: idService
+ *                type: integer
+ *                required: true
+ *          responses:
+ *              204:
+ *                  description: Se agregó un servicio a una orden dada
+ * 
+ *              400:
+ *                  description: Ha ocurrido un error de validación de los datos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errors:
+ *                                      type: array
+ *                                      items:
+ *                                          type: object
+ *                                          properties:
+ *                                              value:
+ *                                                  type: string
+ *                                                  description: Valor del campo que generó el error
+ *                                              msg:
+ *                                                  type: string
+ *                                                  description: Mensaje de error
+ *                                              param:
+ *                                                  type: string
+ *                                                  description: Parámetro que género el error
+ *                                              location:
+ *                                                  type: string
+ *                                                  description: Ubicación del error
+ * 
+ *              404:
+ *                  description: No se ha encontrado el recurso
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: No se encontró el recurso solicitado
+ *              500:
+ *                  description: Ha ocurrido un error interno en el servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: Ha ocurrido un error en intentar ejecutar la operación
+ */
 routes.post('/orders/:idOrder/services/:idService', orderValidator.validateAddService, orderController.addService);
+
+
+/**
+ * @swagger
+ * /orders/{idOrder}/services/{idService}:
+ *      delete:
+ *          summary: Quita un servicio a una orden
+ *          tags: [Orders]
+ *          parameters:
+ *              - in: path
+ *                name: idOrder
+ *                type: integer
+ *                required: true
+ *              
+ *              - in: path
+ *                name: idService
+ *                type: integer
+ *                required: true
+ *          responses:
+ *              204:
+ *                  description: Se quitó un servicio a una orden dada
+ * 
+ *              400:
+ *                  description: Ha ocurrido un error de validación de los datos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errors:
+ *                                      type: array
+ *                                      items:
+ *                                          type: object
+ *                                          properties:
+ *                                              value:
+ *                                                  type: string
+ *                                                  description: Valor del campo que generó el error
+ *                                              msg:
+ *                                                  type: string
+ *                                                  description: Mensaje de error
+ *                                              param:
+ *                                                  type: string
+ *                                                  description: Parámetro que género el error
+ *                                              location:
+ *                                                  type: string
+ *                                                  description: Ubicación del error
+ * 
+ *              404:
+ *                  description: No se ha encontrado el recurso
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: No se encontró el recurso solicitado
+ *              500:
+ *                  description: Ha ocurrido un error interno en el servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: Ha ocurrido un error en intentar ejecutar la operación
+ */
 routes.delete('/orders/:idOrder/services/:idService', orderValidator.validateRemoveService, orderController.removeService);
 
 // Manejan los estados de la orden 
