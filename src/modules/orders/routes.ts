@@ -449,9 +449,288 @@ routes.post('/orders/:idOrder/services/:idService', orderValidator.validateAddSe
  */
 routes.delete('/orders/:idOrder/services/:idService', orderValidator.validateRemoveService, orderController.removeService);
 
-// Manejan los estados de la orden 
+/**
+ * @swagger
+ * /orders/{idOrder}/confirm:
+ *      patch:
+ *          summary: Cambia el estado de la orden a estado Confirmado
+ *          tags: [Orders]
+ *          parameters:
+ *              - in: path
+ *                name: idOrder
+ *                schema:
+ *                  type: integer
+ *                required: true
+ *          responses:
+ *              200:
+ *                  description: Se recuperan todos datos de la orden, junto con el importe total calculado
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  order:
+ *                                      type: object 
+ *                                      properties:
+ *                                          number:
+ *                                              type: integer
+ *                                              description: Nro de Orden
+ *                                          status: 
+ *                                              type: string
+ *                                              description: Estado de orden
+ *                                          date: 
+ *                                              type: string
+ *                                              description: Fecha de carga de la orden
+ *                                          total:
+ *                                              type: number
+ *                                              description: Importe a cobrar de la orden
+ *                                          ownerFullName:
+ *                                              type: string
+ *                                              description: Nombre completo del propietario
+ *                                          carBrand:
+ *                                              type: string
+ *                                              description: Marca del vehículo
+ *                                          carModel:
+ *                                              type: string
+ *                                              description: Modelo del vehículo
+ *                                          carColor:
+ *                                              type: string
+ *                                              description: Color de vehículo
+ *                                          carYear:
+ *                                              type: string
+ *                                              description: Año del modelo
+ *                                          carPlate:
+ *                                              type: string
+ *                                              description: Número de patente
+ *                                          details:
+ *                                              type: array
+ *                                              description: Servicios a aplicar
+ *                                              items:
+ *                                                  type: object
+ *                                                  properties:
+ *                                                      code:
+ *                                                          type: integer
+ *                                                          description: Código de servicio
+ *                                                      service:
+ *                                                          type: string
+ *                                                          description: Descripción del servicio
+ *                                                      total:
+ *                                                          type: number
+ *                                                          description: Importe a cobrar por el servicio
+ * 
+ * 
+ *              400:
+ *                  description: Ha ocurrido un error de validación de los datos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errors:
+ *                                      type: array
+ *                                      items:
+ *                                          type: object
+ *                                          properties:
+ *                                              value:
+ *                                                  type: string
+ *                                                  description: Valor del campo que generó el error
+ *                                              msg:
+ *                                                  type: string
+ *                                                  description: Mensaje de error
+ *                                              param:
+ *                                                  type: string
+ *                                                  description: Parámetro que género el error
+ *                                              location:
+ *                                                  type: string
+ *                                                  description: Ubicación del error
+ * 
+ *              404:
+ *                  description: No se ha encontrado el recurso
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: No se encontró el recurso solicitado
+ *              500:
+ *                  description: Ha ocurrido un error interno en el servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: Ha ocurrido un error en intentar ejecutar la operación
+ */
 routes.patch('/orders/:idOrder/confirm', orderValidator.validateConfirmOrder, orderController.confirmOrder);
+
+
+/**
+ * @swagger
+ * /orders/{idOrder}/close:
+ *      patch:
+ *          summary: Cambia el estado de la orden a cerrada
+ *          tags: [Orders]
+ *          parameters:
+ *              - in: path
+ *                name: idOrder
+ *                schema:
+ *                  type: integer
+ *                required: true
+ *          responses:
+ *              204:
+ *                  description: Se cierra la orden especificada
+ * 
+ *              400:
+ *                  description: Ha ocurrido un error de validación de los datos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errors:
+ *                                      type: array
+ *                                      items:
+ *                                          type: object
+ *                                          properties:
+ *                                              value:
+ *                                                  type: string
+ *                                                  description: Valor del campo que generó el error
+ *                                              msg:
+ *                                                  type: string
+ *                                                  description: Mensaje de error
+ *                                              param:
+ *                                                  type: string
+ *                                                  description: Parámetro que género el error
+ *                                              location:
+ *                                                  type: string
+ *                                                  description: Ubicación del error
+ * 
+ *              404:
+ *                  description: No se ha encontrado el recurso
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: No se encontró el recurso solicitado
+ *              500:
+ *                  description: Ha ocurrido un error interno en el servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: Ha ocurrido un error en intentar ejecutar la operación
+ */
 routes.patch('/orders/:idOrder/close', orderValidator.validateCloseOrder, orderController.closeOrder);
+
+
+/**
+ * @swagger
+ * /orders/{idOrder}/cancel:
+ *      patch:
+ *          summary: Cambia el estado de la orden a cancelado
+ *          tags: [Orders]
+ *          parameters:
+ *              - in: path
+ *                name: idOrder
+ *                schema:
+ *                  type: integer
+ *                required: true
+ *          responses:
+ *              204:
+ *                  description: Se cancela la orden especificada
+ * 
+ *              400:
+ *                  description: Ha ocurrido un error de validación de los datos
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errors:
+ *                                      type: array
+ *                                      items:
+ *                                          type: object
+ *                                          properties:
+ *                                              value:
+ *                                                  type: string
+ *                                                  description: Valor del campo que generó el error
+ *                                              msg:
+ *                                                  type: string
+ *                                                  description: Mensaje de error
+ *                                              param:
+ *                                                  type: string
+ *                                                  description: Parámetro que género el error
+ *                                              location:
+ *                                                  type: string
+ *                                                  description: Ubicación del error
+ * 
+ *              404:
+ *                  description: No se ha encontrado el recurso
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: No se encontró el recurso solicitado
+ *              500:
+ *                  description: Ha ocurrido un error interno en el servidor
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: object
+ *                              properties:
+ *                                  errCode: 
+ *                                      type: integer
+ *                                      description: Código interno de error
+ *                                  message:
+ *                                      type: string
+ *                                      description: Mensaje genérico de error
+ *                              example:
+ *                                  errCode: 1000
+ *                                  message: Ha ocurrido un error en intentar ejecutar la operación
+ */
 routes.patch('/orders/:idOrder/cancel', orderValidator.validateCancelOrder, orderController.cancelOrder);
 
 export default routes;
