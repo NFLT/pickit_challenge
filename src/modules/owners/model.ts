@@ -42,8 +42,11 @@ export const deleteOwnerById = async (idOwner: number) => {
     return result;
 }
 
-export const getCars = async (idOwner: string) => {
+export const getCars = async (idOwner: number) => {
     const sql = `select * from autos where rela_propietario = ?`;
     let result = await database.execute(sql, [idOwner]);
+
+    console.log(idOwner);
+    console.log(result);
     return result;    
 }

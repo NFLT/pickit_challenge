@@ -19,6 +19,8 @@ class OwnerMapper {
             carPlate: car.patente,
             carYear: car.anio
         }
+
+        return carDto;
     }
 }
 

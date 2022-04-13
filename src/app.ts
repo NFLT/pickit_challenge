@@ -8,9 +8,14 @@ import dotenv from 'dotenv';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 
-import { getAllRouters } from './routes';
+
+import logger from './libs/Logger';
+import morganMiddleware from './middlewares/morganMiddleware';
+
 import errorHandler from './middlewares/errorHandler';
 import swaggerConfig from './config/swagger';
+import { getAllRouters } from './routes';
+
 
 dotenv.config();
 
@@ -18,7 +23,7 @@ const app = express();
 
 app.use(cors());
 app.use(helmet());
-app.use(morgan('dev'));
+app.use(morganMiddleware);
 
 //Configurando para recibir peticiones en formato JSON
 app.use(bodyParser.json());
@@ -46,4 +51,5 @@ const port = process.env.API_SERVER_PORT;
 const server = http.createServer(app);
 server.listen(port, () => {
     console.log(`Working on port ${ port }`);
+    logger.debug(`Server is up and running @ http://localhost:${ port }`);
 });
