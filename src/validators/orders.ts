@@ -33,7 +33,7 @@ const validateOrder = async (idOrder: number) => {
  * @param idOrder
  * @returns verdadero si existe
  */
- const existOrder = async (idOrder: number) => {
+ const existsOrder = async (idOrder: number) => {
     const order = await orderModel.getOrders(idOrder);
 
     if (!order) {
@@ -50,9 +50,9 @@ const validateOrder = async (idOrder: number) => {
  * @param idCar
  * @returns Boleano indicando si se trata de un campo inválido
  */
- const existCar = (idCar: number) => {
-    const car = carModel.getCars(idCar);
-
+ const existsCar = async (idCar: number) => {
+    const car = await carModel.getCars(idCar);
+    console.log(car);
     if (!car) {
         let msg = "El auto especificado no se encuentra registrado en el sistema";
         throw new NotFoundError(ErrorCodes.NOT_FOUND_CAR, msg);
@@ -153,7 +153,8 @@ export const validateCreateOrder = [
         .exists()
         .not()
         .isEmpty()
-        .custom(existCar)
+        .isNumeric()
+        .custom(existsCar)
         .custom(notHasOpenOrders),
     (req:Request, res: Response, next: NextFunction) => {
         validateResult(req, res, next)
@@ -166,12 +167,14 @@ export const validateAddService = [
         .exists()
         .not()
         .isEmpty()
+        .isNumeric()
         .custom(validateOrder),
     
     check('idService')
         .exists()
         .not()
         .isEmpty()
+        .isNumeric()
         .custom(existsService),
 
     (req:Request, res: Response, next: NextFunction) => {
@@ -184,12 +187,14 @@ export const validateRemoveService = [
         .exists()
         .not()
         .isEmpty()
+        .isNumeric()
         .custom(validateOrder),
     
     check('idService')
         .exists()
         .not()
         .isEmpty()
+        .isNumeric()
         .custom(existsService),
 
     (req:Request, res: Response, next: NextFunction) => {
@@ -202,7 +207,8 @@ export const validateConfirmOrder = [
         .exists()
         .not()
         .isEmpty()
-        .custom(existOrder)
+        .isNumeric()
+        .custom(existsOrder)
         .custom(validateConfirmation)
         .custom(hasDetails),
 
@@ -216,7 +222,8 @@ export const validateCloseOrder = [
         .exists()
         .not()
         .isEmpty()
-        .custom(existOrder)
+        .isNumeric()
+        .custom(existsOrder)
         .custom(validateClose),
 
     (req:Request, res: Response, next: NextFunction) => {
@@ -229,7 +236,8 @@ export const validateCancelOrder = [
         .exists()
         .not()
         .isEmpty()
-        .custom(existOrder)
+        .isNumeric()
+        .custom(existsOrder)
         .custom(validateCancelation),
 
     (req:Request, res: Response, next: NextFunction) => {
