@@ -9,7 +9,7 @@ import * as carModel from '../modules/cars/model';
 
 /**
  * Valida Se la cadena es un nombre o un apellido
- * @param value
+ * @param idOwner
  * @returns Boleano indicando si se trata de un campo inválido
  */
 const existOwner = async (idOwner: number) => {
@@ -26,7 +26,7 @@ const existOwner = async (idOwner: number) => {
 
 /**
  * Valida Si la cadena es una patente de automóvil
- * @param value
+ * @param carPlate
  * @returns Boleano indicando si se trata de un campo inválido
  */
 const isCarPlate = (carPlate: string) => {
@@ -61,7 +61,7 @@ const notExistCarPlate = async (carPlate: string) => {
 
 /**
  * Valida si existe el auto especificado
- * @param value
+ * @param idCar
  * @returns Boleano indicando si se trata de un campo inválido
  */
  const existsCar = async (idCar: number) => {
@@ -74,6 +74,23 @@ const notExistCarPlate = async (carPlate: string) => {
 
     return true;
 };
+
+
+/**
+ * Se verifica si el vehículo posee ordenes asociadas
+ * @param idCar id del vehículo
+ * @returns 
+ */
+const hasRelatedOrders = async (idCar: number) => {
+    const hasOrders = await carModel.hasOrders(idCar);
+
+    if (hasOrders) {
+        let msg = "No se puede eliminar un vehículo con ordenes de servicio vinculadas."
+        throw new ConstraintError(ErrorCodes.CONSTRAINT_CAR_ALREADY_IN_ORDER, msg);
+    }
+
+    return true;
+}
 
 export const validateCreate = [
     check('brand')
@@ -168,7 +185,8 @@ export const validateDelete = [
         .not()
         .isEmpty()
         .isNumeric()
-        .custom(existsCar),
+        .custom(existsCar)
+        .custom(hasRelatedOrders),
     (req:Request, res: Response, next: NextFunction) => {
         validateResult(req, res, next)
     }

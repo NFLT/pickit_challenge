@@ -3,6 +3,7 @@ import * as carModel from './model';
 
 import carMapper from './mappers';
 import { ConstraintError, ErrorCodes } from '../../errors/database.errors';
+import { nextTick } from 'process';
 
 export const createCar = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -50,6 +51,19 @@ export const getCar = async (req: Request, res: Response, next: NextFunction) =>
         
         const carDto = carMapper.toCarDto(car);
         res.json({ car: carDto });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getCarHistory = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const idCar = parseInt(req.params.idCar);
+        const carHistory = await carModel.getCarHistory(idCar);
+        const carHistoryDto = carHistory.map((carHistoryItem: any) => {
+            return carMapper.toCarHistoryItemDto(carHistoryItem);
+        });
+        res.json({ history: carHistoryDto });
     } catch (error) {
         next(error);
     }

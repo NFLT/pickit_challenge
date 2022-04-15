@@ -1,4 +1,4 @@
-import { CarDto } from './dtos';
+import { CarDto, CarHistoryItemDto } from './dtos';
 
 class carMapper {
     toCarDto(car: any) {
@@ -14,6 +14,18 @@ class carMapper {
         };
 
         return carDto;
+    }
+
+    toCarHistoryItemDto(carHistoryItem: any) {
+        const carHistoryItemDto : CarHistoryItemDto = {
+            idOrder: carHistoryItem.id_orden,
+            date: carHistoryItem.orden_fecha,
+            state: carHistoryItem.orden_estado,
+            service: carHistoryItem.detalle_servicio,
+            total: carHistoryItem.detalle_importe
+        }
+
+        return carHistoryItemDto;
     }
 }
 

@@ -51,6 +51,13 @@ export const getCarHistory = async (idCar: number) => {
     return result;
 }
 
+export const hasOrders = async (idCar: number) => {
+    const sql = `select * from ordenes where rela_auto = ?`;
+    let result = await database.execute(sql, [ idCar ]);
+
+    return result.length > 0;
+}
+
 
 export const createCar = async (brand: string, model: string, year: number, colour:string , 
     carPlate: string, idOwner: number) => {

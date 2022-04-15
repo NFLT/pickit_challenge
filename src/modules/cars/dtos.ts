@@ -8,3 +8,11 @@ export interface CarDto {
     carColor: string,
     carPlate: string
 }
+
+export interface CarHistoryItemDto {
+    idOrder: number,
+    date: string,
+    state: string,
+    service: string,
+    total: number
+}
