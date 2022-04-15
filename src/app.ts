@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import http from 'http';
-import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
